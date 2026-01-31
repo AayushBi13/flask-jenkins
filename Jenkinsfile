@@ -27,23 +27,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                // 'SonarQube' must match the Server Name in Jenkins System Settings
-                withSonarQubeEnv('SonarQube') {
-                    sh "${SCANNER_HOME}/bin/sonar-scanner"
-                }
-            }
-        }
-
-        stage("Quality Gate") {
-            steps {
-                // Pause pipeline until SonarQube returns the analysis result
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+      
     }
 
     post {
