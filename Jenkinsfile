@@ -1,22 +1,20 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11-slim'
+        }
+    }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                sh 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests & Coverage') {
             steps {
-                sh 'python3 -m pytest --cov=app --cov-report=xml tests/'
+                sh 'pytest --cov=app --cov-report=xml tests/'
             }
         }
     }
