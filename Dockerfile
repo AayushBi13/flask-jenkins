@@ -8,8 +8,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     curl \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN python3 --version && pip3 --version
+    && rm -rf /var/lib/apt/lists/* \
+    && python3 --version && pip3 --version
 
 USER jenkins
