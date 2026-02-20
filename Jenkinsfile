@@ -1,23 +1,32 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11-slim'
-        }
+    agent any
+
+    environment {
+        VENV = "venv"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
+        stage('Create Virtual Environment') {
+            steps {
+                sh '''
+                    python3 --version
+                    python3 -m venv $VENV
+                '''
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    python -m venv venv
-                    . venv/bin/activate
-                    pip install --upgrade pip
+                    . $VENV/bin/activate
+                    python -m pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
             }
@@ -26,7 +35,7 @@ pipeline {
         stage('Run Tests & Coverage') {
             steps {
                 sh '''
-                    . venv/bin/activate
+                    . $VENV/bin/activate
                     python -m pytest --cov=app --cov-report=xml tests/
                 '''
             }
